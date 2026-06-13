@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login SIREMO</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center; 
+      align-items: center;
+      overflow-x: hidden; 
+      position: relative;
+      padding: 20px;
+    }
+
+    .wrapper {
+      width: 1100px;
+      max-width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 600px;
+      margin: 0 auto;
+    }
+
+    .content-left {
+      width: 35%;
+      position: relative;
+      z-index: 3;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .logo img {
+      width: 65px;
+      height: auto;
+    }
+
+    .logo-text h2 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      line-height: 1;
+      color: #0d3b66;
+    }
+
+    .logo-text p {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .content-left h1 {
+      font-size: 36px;
+      line-height: 1.3;
+      color: #111;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .desc {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .feature-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #eaf3ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3a86ff;
+      font-size: 14px;
+    }
+
+    .feature span {
+      font-size: 15px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* KONTEN TENGAH (KARTU LOGIN) */
+    .content-center {
+      width: 40%;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 4; 
+    }
+
+    .login-card{
+      width:100%;
+      max-width:420px;
+      background:#fff;
+      padding:30px;
+      border-radius:4px;
+      box-shadow:0 10px 40px rgba(0,0,0,.08);
+      max-height:80vh;
+      overflow-y:auto;
+    }
+
+
+    .login-card h2 {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .input-box {
+      position: relative;
+    }
+
+    .input-box input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0 48px 0 40px; 
+      font-size: 13px;
+      outline: none;
+      color: #333;
+    }
+
+    .input-box input::placeholder {
+      color: #aaa;
+    }
+
+    .input-box input:focus {
+      border-color: #1d63b8;
+    }
+
+    .left-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 14px;
+    }
+
+    .right-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+
+    .right-icon:hover {
+      color: #333;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-bottom: 25px;
+    }
+
+    .forgot a {
+      text-decoration: none;
+      color: #1d63b8;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 44px;
+      border: none;
+      border-radius: 4px;
+      background: #1d63b8;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #154a8a;
+    }
+
+    /* Loading state saat tombol diklik */
+    .login-btn:disabled {
+      background: #8faed4;
+      cursor: not-allowed;
+    }
+
+    .login {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .login a {
+      color: #1d63b8;
+      text-decoration: none;
+      font-weight: 600; 
+    }
+
+    /* BACKGROUND MOBIL */
+    .car-bg {
+      position: absolute;
+      right: -60px;       
+      bottom: -6px;      
+      width: 580px;       
+      height: auto;
+      opacity: 0.15;      
+      z-index: 1;         
+      pointer-events: none; 
+    }
+
+    /* RESPONSIVE LAYOUT */
+    @media(max-width: 992px){
+      body {
+        overflow-y: auto;
+      }
+      .wrapper {
+        flex-direction: column;
+        justify-content: center;
+        gap: 40px;
+        padding: 40px 0;
+        min-height: 700px;
+      }
+      .content-left, .content-center {
+        width: 100%;
+      }
+      .content-left {
+        text-align: center;
+      }
+      .logo {
+        justify-content: center;
+      }
+      .feature {
+        justify-content: center;
+      }
+      .car-bg {
+        display: none; 
+      }
+    }
+
+.alamat-box{
+    width:100%;
+    height:90px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:12px;
+    resize:none;
+    outline:none;
+    font-size:13px;
+}
+
+.alamat-box:focus{
+    border-color:#1d63b8;
+}
+
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <!-- KIRI -->
+    <div class="content-left">
+
+        <div class="logo">
+            <img src="upload_foto/logo siremo.png" alt="Logo SIREMO">
+
+            <div class="logo-text">
+                <h2>SIREMO</h2>
+                <p>RENT A CAR, EASY, & TRUSTED</p>
+            </div>
+        </div>
+
+        <h1>
+            Sewa Mobil,<br>
+            Jadi Lebih Mudah
+        </h1>
+
+        <p class="desc">
+            SIREMO menghadirkan pengalaman
+            sewa mobil yang praktis, aman,
+            dan terpercaya untuk setiap
+            perjalanan Anda.
+        </p>
+
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>Aman & Terpercaya</span>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fa-solid fa-car"></i>
+            </div>
+            <span>Pilihan Mobil Lengkap</span>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <span>Layanan 24/7</span>
+        </div>
+
+    </div>
+
+    <!-- TENGAH -->
+    <div class="content-center">
+
+        <div class="login-card">
+
+            <h2>Daftar Akun SIREMO</h2>
+
+            <p class="subtitle">
+                Lengkapi data berikut untuk membuat akun
+            </p>
+
+            <form action="register.php" method="POST">
+
+                <!-- NAMA -->
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-user left-icon"></i>
+
+                        <input type="text"
+                               name="nama_lengkap"
+                               placeholder="Masukkan Nama Lengkap">
+                    </div>
+                </div>
+
+                <!-- EMAIL -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-box">
+                        <i class="fa-regular fa-envelope left-icon"></i>
+
+                        <input type="email"
+                               name="email"
+                               placeholder="Masukkan Email">
+                    </div>
+                </div>
+
+                <!-- TELEPON -->
+                <div class="form-group">
+                    <label>Nomor Telepon</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-phone left-icon"></i>
+
+                        <input type="text"
+                               name="telepon"
+                               placeholder="Masukkan Nomor Telepon">
+                    </div>
+                </div>
+
+                <!-- ALAMAT -->
+                <div class="form-group">
+                    <label>Alamat</label>
+
+                    <textarea
+                        name="alamat"
+                        class="alamat-box"
+                        placeholder="Masukkan Alamat Lengkap"></textarea>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+                    <label>Kata Sandi</label>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock left-icon"></i>
+
+                        <input type="password"
+                               id="kata_sandi"
+                               name="kata_sandi"
+                               placeholder="Masukkan Kata Sandi">
+
+                        <span class="material-symbols-outlined right-icon password-toggle">
+                            visibility_off
+                        </span>
+                    </div>
+                </div>
+
+                <!-- KONFIRMASI -->
+                <div class="form-group">
+                    <label>Konfirmasi Kata Sandi</label>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock left-icon"></i>
+
+                        <input type="password"
+                               id="konfirmasi_kata_sandi"
+                               name="konfirmasi_kata_sandi"
+                               placeholder="Masukkan Ulang Kata Sandi">
+
+                        <span class="material-symbols-outlined right-icon confirm-toggle">
+                            visibility_off
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Daftar
+                </button>
+
+                <div class="login">
+                    Sudah punya akun? <a href="login.html">Login di sini</a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- MOBIL -->
+    <img src="upload_foto/latar mobil.png"
+         class="car-bg"
+         alt="Mobil">
+
+</div>
+
+<script>
+
+document.querySelector(".password-toggle")
+.addEventListener("click", function(){
+
+    const pass =
+    document.getElementById("kata_sandi");
+
+    if(pass.type === "password"){
+        pass.type = "text";
+        this.textContent = "visibility";
+    }else{
+        pass.type = "password";
+        this.textContent = "visibility_off";
+    }
+
+});
+
+document.querySelector(".confirm-toggle")
+.addEventListener("click", function(){
+
+    const pass =
+    document.getElementById("konfirmasi_kata_sandi");
+
+    if(pass.type === "password"){
+        pass.type = "text";
+        this.textContent = "visibility";
+    }else{
+        pass.type = "password";
+        this.textContent = "visibility_off";
+    }
+
+});
+</script>
+
+<script>
+  const form = document.querySelector('form');
+  const kataSandi = document.getElementById('kata_sandi');
+  const konfirmasi = document.getElementById('konfirmasi_kata_sandi');
+
+  form.addEventListener('submit', function(e) {
+    if (kataSandi.value !== konfirmasi.value) {
+      e.preventDefault();
+      alert('Kata Sandi dan Konfirmasi Kata Sandi tidak sama!');
+    }
+  });
+</script>
+
+</body>
