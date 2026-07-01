@@ -1,0 +1,366 @@
+<?php
+session_start();
+
+// Jika sudah login sebagai admin, redirect ke dashboard admin
+if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+    header("Location: admin_dashboard.php");
+    exit();
+}
+
+include 'connection.php';
+
+$error = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+    
+    // Query ke tabel admin
+    $query = "SELECT * FROM admin WHERE email = '$email' AND role = 'admin'";
+    $result = mysqli_query($conn, $query);
+    
+    if ($row = mysqli_fetch_assoc($result)) {
+        // Verifikasi password (MD5) - kolom kata_sandi
+        if ($row['kata_sandi'] == md5($password)) {
+            $_SESSION['id_admin'] = $row['id_admin'];
+            $_SESSION['nama'] = $row['nama_lengkap'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['role'] = 'admin';
+            
+            header("Location: admin_dashboard.php");
+            exit();
+        } else {
+            $error = "Password salah!";
+        }
+    } else {
+        $error = "Email tidak ditemukan atau bukan admin!";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login SIREMO ADMIN</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .bg-split {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%; 
+      height: 100%;
+      background: #024783; 
+      z-index: 1;
+    }
+
+    .wrapper {
+      width: 1100px;
+      max-width: 100%;
+      min-height: 650px;
+      display: flex;
+      justify-content: center; 
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      margin: 0 auto;
+    }
+
+    .login-card {
+      width: 360px; 
+      background: white;
+      padding: 35px 30px;
+      border-radius: 4px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 4;
+    }
+
+    .brand-section {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-logo-img {
+      width: 65px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: #38b6ff; 
+    }
+
+    .brand-slogan {
+      font-size: 8px;
+      font-weight: 600;
+      color: #555;
+      letter-spacing: 2px;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .brand-slogan::before,
+    .brand-slogan::after {
+      content: "";
+      display: block;
+      width: 25px;
+      height: 1px;
+      background: #777;
+    }
+
+    .welcome-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      margin-top: 20px;
+      margin-bottom: 2px;
+    }
+
+    .welcome-desc {
+      font-size: 10px;
+      color: #777;
+      line-height: 1.3;
+    }
+
+    /* ========== ERROR MESSAGE ========== */
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #fca5a5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+    }
+    .error-message i {
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .input-box {
+      position: relative;
+    }
+
+    .input-box input {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      padding: 0 40px 0 38px;
+      font-size: 11px;
+      outline: none;
+      color: #333;
+    }
+
+    .input-box input:focus {
+      border-color: #024783;
+    }
+
+    .left-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 13px;
+    }
+
+    .right-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #999;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .forgot a {
+      font-size: 10px;
+      color: #024783;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 40px;
+      background: #024783;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #013461;
+    }
+
+    .car-bg {
+      position: absolute;
+      left: -50px; 
+      bottom: 60px;
+      width: 480px; 
+      height: auto;
+      opacity: 0.50; 
+      z-index: 2; 
+      pointer-events: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+      .bg-split {
+        display: none;
+      }
+      .car-bg {
+        display: none;
+      }
+      .wrapper {
+        min-height: auto;
+      }
+      .login-card {
+        width: 100%;
+        max-width: 340px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-split"></div>
+
+  <div class="wrapper">
+
+    <div class="login-card">
+      
+      <div class="brand-section">
+        <img src="upload_foto/logo siremo.png" class="brand-logo-img" alt="Logo SIREMO">
+        
+        <div class="brand-title">SIREMO <span>ADMIN</span></div>
+        
+        <div class="brand-slogan">CAR RENTAL SYSTEM</div>
+
+        <h2 class="welcome-text">Selamat Datang</h2>
+        <p class="welcome-desc">Silahkan login untuk masuk ke dashboard Admin</p>
+      </div>
+
+      <!-- Tampilkan error jika ada -->
+      <?php if ($error): ?>
+        <div class="error-message">
+          <i class="fa-regular fa-circle-exclamation"></i> <?= $error ?>
+        </div>
+      <?php endif; ?>
+
+      <form method="POST" action="">
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-box">
+            <i class="fa-regular fa-envelope left-icon"></i>
+            <input type="email" name="email" placeholder="Masukkan Email Anda" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-box">
+            <i class="fa-solid fa-lock left-icon"></i>
+            <input type="password" name="password" id="password" placeholder="Masukkan Password Anda" required>
+            <span class="material-symbols-outlined right-icon" id="togglePassword">visibility_off</span>
+          </div>
+        </div>
+
+        <div class="forgot">
+          <a href="#">Lupa Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <i class="fa-solid fa-shield-halved"></i> Login as Admin
+        </button>
+      </form>
+
+    </div>
+
+    <img src="upload_foto/mobilpth.png" class="car-bg" alt="Mobil Putih">
+
+  </div>
+
+  <script>
+    const toggle = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    toggle.addEventListener('click', function() {
+      const type = password.type === 'password' ? 'text' : 'password';
+      password.type = type;
+      this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    });
+  </script>
+
+</body>
+</html>
